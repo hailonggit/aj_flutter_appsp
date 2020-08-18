@@ -34,7 +34,7 @@ class NoticeWidget extends StatefulWidget {
 class _NoticeState extends State<NoticeWidget> {
   static const String appKey = "b9abfa24ee644e1d8baa39cef165261d";
   List<SpNoticeModelItem> marqueeeItems = [];
-
+  var _scaffoldkey = new GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -68,9 +68,8 @@ class _NoticeState extends State<NoticeWidget> {
     }
 
     if (errorMsg.isNotEmpty) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(errorMsg)),
-      );
+      var snackBar = SnackBar(content: Text(errorMsg));
+      _scaffoldkey.currentState.showSnackBar(snackBar);
       return;
     }
     _handleNotice(noticeModel.modelItemList, noticeType);
@@ -166,6 +165,7 @@ class _NoticeState extends State<NoticeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldkey,
       appBar: AppBar(
         title: const Text('公告样式'),
       ),
