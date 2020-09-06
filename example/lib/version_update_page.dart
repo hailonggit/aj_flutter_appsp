@@ -1,17 +1,15 @@
-import 'dart:ui';
-import 'styles.dart';
-import 'package:flutter/material.dart';
-import 'package:aj_flutter_appsp/sp_resp_update_model.dart';
-import 'package:aj_flutter_appsp/appsp_status_code.dart';
-import 'navigator_utils.dart';
-import 'version_update_dialog.dart';
-import 'dialog_utils.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:aj_flutter_appsp/aj_flutter_appsp.dart' as appsp;
-import 'package:flutter/services.dart';
 import 'dart:io';
-import 'dart:convert';
-import 'dart:async';
+import 'dart:ui';
+
+import 'package:aj_flutter_appsp/aj_flutter_appsp.dart' as appsp;
+import 'package:aj_flutter_appsp/appsp_status_code.dart';
+import 'package:aj_flutter_appsp/sp_resp_update_model.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'dialog_utils.dart';
+import 'styles.dart';
+import 'version_update_dialog.dart';
 
 class VersionUpdatePage extends StatelessWidget {
   @override
@@ -36,7 +34,7 @@ enum UpdateType {
 }
 
 class _VersionUpdateState extends State<VersionUpdateWidget> {
-  static const String appKey = "b9abfa24ee644e1d8baa39cef165261d";
+  static const String appKey = "64cf5a851f37c6c0ab7a3186a2377d5d";
 
   @override
   void initState() {
@@ -55,28 +53,18 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
       return;
     }
     print("spUpdateModel is $updateModel ");
-    String errorMsg = "";
-    switch (updateModel.statusCode) {
-      case AppSpStatusCode.StatusCode_Success:
-        break;
-      case AppSpStatusCode.StatusCode_Cancel:
-        errorMsg = "用户已取消json文件下载";
-        break;
-      case AppSpStatusCode.StatusCode_Timeout:
-        errorMsg = "服务器json文件地址连接超时";
-        break;
-      case AppSpStatusCode.StatusCode_UrlFormatError:
-        errorMsg = "请求地址格式错误";
-        break;
+    String errorMsg = null;
+    if (AppSpStatusCode.StatusCode_Success != updateModel.code) {
+      errorMsg = updateModel.errorMsg;
     }
 
-    if (errorMsg.isNotEmpty) {
+    if (errorMsg != null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(content: Text(errorMsg)),
       );
-      return;
+    } else {
+      _handleUpdate(updateModel, updateType);
     }
-    _handleUpdate(updateModel, updateType);
   }
 
   void _handleUpdate(SpRespUpdateModel updateModel, UpdateType updateType) {

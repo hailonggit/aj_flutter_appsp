@@ -1,14 +1,11 @@
-import 'dart:io';
 import 'dart:ui';
 
-import 'package:dio/dio.dart';
+import 'package:aj_flutter_appsp/sp_notice_model_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:aj_flutter_appsp/sp_notice_model_item.dart';
+
 import 'commons.dart';
-import 'navigator_utils.dart';
 
 // ignore: must_be_immutable
 class NoticeDialog extends Dialog {
@@ -87,7 +84,11 @@ class _NoticeWidgetState extends State<NoticeWidget> {
       constraints: BoxConstraints(minHeight: 24),
       child: new Text(
         widget.noticeItem?.details ?? "",
-        style: TextStyle(fontSize: 15.0 / scale, color: Color(0xFF666666)),
+        style: TextStyle(
+            fontSize: 15.0 / scale,
+            color: Color(0xFF666666),
+            fontWeight: FontWeight.normal,
+            decoration: TextDecoration.none),
       ),
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.only(left: 12, right: 12),
@@ -146,43 +147,43 @@ class _NoticeWidgetState extends State<NoticeWidget> {
     return new WillPopScope(
       child: new Padding(
         padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-        child: new Material(
-          type: MaterialType.transparency,
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Container(
-                decoration: ShapeDecoration(
-                  color: Color(0xffffffff),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.radius),
-                    ),
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Container(
+              decoration: ShapeDecoration(
+                color: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(widget.radius),
                   ),
                 ),
-                child: new Column(
-                  children: <Widget>[
-                    new Container(
-                      child: new Text(
-                        widget.noticeItem?.title ?? "",
-                        style: TextStyle(
-                            fontSize: 20.0 / scale, color: widget.titleColor),
-                      ),
-                      height: 36,
-                      margin: EdgeInsets.only(top: 6),
-                      alignment: Alignment.center,
-                    ),
-                    new Container(
-                      constraints: BoxConstraints(minHeight: widget.minHeight),
-                      child: getNoticeDetailsLayout(),
-                    ),
-                    getDivider(),
-                    this._buildOperationBar(),
-                  ],
-                ),
               ),
-            ],
-          ),
+              child: new Column(
+                children: <Widget>[
+                  new Container(
+                    child: new Text(
+                      widget.noticeItem?.title ?? "",
+                      style: TextStyle(
+                          fontSize: 20.0 / scale,
+                          color: widget.titleColor,
+                          fontWeight: FontWeight.normal,
+                          decoration: TextDecoration.none),
+                    ),
+                    height: 36,
+                    margin: EdgeInsets.only(top: 6),
+                    alignment: Alignment.center,
+                  ),
+                  new Container(
+                    constraints: BoxConstraints(minHeight: widget.minHeight),
+                    child: getNoticeDetailsLayout(),
+                  ),
+                  getDivider(),
+                  this._buildOperationBar(),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
       onWillPop: () {

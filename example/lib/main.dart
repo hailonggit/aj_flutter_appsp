@@ -1,8 +1,8 @@
-import 'dart:async';
-import 'version_update_page.dart';
+import 'package:flutter/material.dart';
+
 import 'notice_page.dart';
 import "styles.dart";
-import 'package:flutter/material.dart';
+import 'version_update_page.dart';
 
 void main() => runApp(MaterialApp(
       home: MyApp(),

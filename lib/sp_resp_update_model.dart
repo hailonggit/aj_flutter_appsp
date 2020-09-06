@@ -2,24 +2,26 @@ class SpRespUpdateModel {
   bool isExternalUrl;
   bool mustUpdate;
   bool showUpdate;
-  int statusCode;
+  String code;
+  String errorMsg;
   String updateLog;
   String url;
 
-  SpRespUpdateModel(
-      {this.isExternalUrl,
-      this.mustUpdate,
-      this.showUpdate,
-      this.statusCode,
-      this.updateLog,
-      this.url});
+  SpRespUpdateModel({this.isExternalUrl,
+    this.mustUpdate,
+    this.showUpdate,
+    this.code,
+    this.errorMsg,
+    this.updateLog,
+    this.url});
 
 
   SpRespUpdateModel.fromJson(Map<String, dynamic> json) {
     isExternalUrl = json['isExternalUrl'];
     mustUpdate = json['mustUpdate'];
     showUpdate = json['showUpdate'];
-    statusCode = json['statusCode'];
+    code = json['code'];
+    errorMsg = json['errorMsg'];
     updateLog = json['updateLog'];
     url = json['url'];
   }
@@ -29,14 +31,18 @@ class SpRespUpdateModel {
     data['isExternalUrl'] = this.isExternalUrl;
     data['mustUpdate'] = this.mustUpdate;
     data['showUpdate'] = this.showUpdate;
-    data['statusCode'] = this.statusCode;
+    data['code'] = this.code;
+    data['errorMsg'] = this.errorMsg;
     data['updateLog'] = this.updateLog;
     data['url'] = this.url;
     return data;
   }
 
+
   @override
   String toString() {
-    return 'SpRespUpdateModel{isExternalUrl: $isExternalUrl, mustUpdate: $mustUpdate, showUpdate: $showUpdate, statusCode: $statusCode, updateLog: $updateLog, url: $url}';
+    return 'SpRespUpdateModel{isExternalUrl: $isExternalUrl, mustUpdate: $mustUpdate, showUpdate: $showUpdate, code: $code, errorMsg: $errorMsg, updateLog: $updateLog, url: $url}';
   }
+
+
 }

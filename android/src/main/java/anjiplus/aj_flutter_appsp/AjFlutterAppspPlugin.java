@@ -1,17 +1,19 @@
 package anjiplus.aj_flutter_appsp;
 
+import android.app.Activity;
+import android.app.Application;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.anji.appsp.sdk.AppSpConfig;
-import com.anji.appsp.sdk.AppSpStatusCode;
+import com.anji.appsp.sdk.AppSpLog;
 import com.anji.appsp.sdk.IAppSpNoticeCallback;
 import com.anji.appsp.sdk.IAppSpVersionUpdateCallback;
-import com.anji.appsp.sdk.SpLog;
-import com.anji.appsp.sdk.model.SpRespNoticeModel;
-import com.anji.appsp.sdk.model.SpRespUpdateModel;
+import com.anji.appsp.sdk.model.AppSpNoticeModel;
+import com.anji.appsp.sdk.model.AppSpUpdateModel;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -62,6 +64,7 @@ public class AjFlutterAppspPlugin implements MethodCallHandler {
         @Override
         public void error(
                 final String errorCode, final String errorMessage, final Object errorDetails) {
+            AppSpLog.d("Test error  ");
             handler.post(
                     new Runnable() {
                         @Override
@@ -87,8 +90,8 @@ public class AjFlutterAppspPlugin implements MethodCallHandler {
         AppSpConfig.getInstance().init(registrar.activity(), appKey);
         AppSpConfig.getInstance().setVersionUpdateCallback(new IAppSpVersionUpdateCallback() {
             @Override
-            public void update(SpRespUpdateModel updateModel) {
-                SpLog.d("Test updateModel is " + updateModel);
+            public void update(AppSpUpdateModel updateModel) {
+                AppSpLog.d("Test updateModel is " + updateModel);
                 if (updateModel == null) {
                     resultWrapper.notImplemented();
                 } else {
@@ -104,8 +107,9 @@ public class AjFlutterAppspPlugin implements MethodCallHandler {
         AppSpConfig.getInstance().init(registrar.activity(), appKey);
         AppSpConfig.getInstance().setNoticeCallback(new IAppSpNoticeCallback() {
             @Override
-            public void notice(SpRespNoticeModel noticeModel) {
-                SpLog.d("Test updateModel is " + noticeModel);
+            public void notice(AppSpNoticeModel noticeModel) {
+                AppSpLog.d("Test noticeModel is " + noticeModel);
+
                 if (noticeModel == null) {
                     resultWrapper.notImplemented();
                 } else {
@@ -122,7 +126,6 @@ public class AjFlutterAppspPlugin implements MethodCallHandler {
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         MethodResultWrapper resultWrapper = new MethodResultWrapper(result);
-        Log.d("hailong22", " AAA onMethodCall ");
         if (call.method.equals("getUpdateModel")) {
             String appkey = null;
             Object parameter = call.arguments();

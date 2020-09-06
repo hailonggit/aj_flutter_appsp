@@ -2,11 +2,12 @@ import 'sp_notice_model_item.dart';
 
 class SpRespNoticeModel {
   List<SpNoticeModelItem> modelItemList;
-   int statusCode;//状态码
-
+  String code;
+  String errorMsg;
   SpRespNoticeModel(
       {this.modelItemList,
-        this.statusCode,
+        this.code,
+        this.errorMsg
         });
 
 
@@ -17,7 +18,8 @@ class SpRespNoticeModel {
         modelItemList.add(new SpNoticeModelItem.fromJson(v));
       });
     }
-    statusCode = json['statusCode'];
+    code = json['code'];
+    errorMsg = json['errorMsg'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,13 +28,14 @@ class SpRespNoticeModel {
       data['modelItemList'] =
           this.modelItemList.map((v) => v.toJson()).toList();
     }
-    data['statusCode'] = this.statusCode;
+    data['code'] = this.code;
+    data['errorMsg'] = this.errorMsg;
     return data;
   }
 
   @override
   String toString() {
-    return 'SpRespNoticeModel{modelItemList: $modelItemList, statusCode: $statusCode}';
+    return 'SpRespNoticeModel{modelItemList: $modelItemList, code: $code, errorMsg: $errorMsg}';
   }
 
 

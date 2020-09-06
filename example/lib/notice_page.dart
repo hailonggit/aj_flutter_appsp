@@ -1,21 +1,15 @@
 import 'dart:ui';
-import 'styles.dart';
-import 'package:flutter/material.dart';
-import 'package:aj_flutter_appsp/sp_resp_update_model.dart';
-import 'package:aj_flutter_appsp/appsp_status_code.dart';
-import 'navigator_utils.dart';
-import 'version_update_dialog.dart';
-import 'package:aj_flutter_appsp/sp_resp_notice_model.dart';
-import 'package:aj_flutter_appsp/sp_notice_model_item.dart';
-import 'notice_type.dart';
-import 'notice_dialog.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:aj_flutter_appsp/aj_flutter_appsp.dart' as appsp;
-import 'package:flutter/services.dart';
-import 'dart:io';
-import 'dart:convert';
-import 'dart:async';
+import 'package:aj_flutter_appsp/appsp_status_code.dart';
+import 'package:aj_flutter_appsp/sp_notice_model_item.dart';
+import 'package:aj_flutter_appsp/sp_resp_notice_model.dart';
+import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+
+import 'notice_dialog.dart';
+import 'notice_type.dart';
+import 'styles.dart';
 
 class NoticePage extends StatelessWidget {
   @override
@@ -32,9 +26,10 @@ class NoticeWidget extends StatefulWidget {
 }
 
 class _NoticeState extends State<NoticeWidget> {
-  static const String appKey = "b9abfa24ee644e1d8baa39cef165261d";
+  static const String appKey = "64cf5a851f37c6c0ab7a3186a2377d5d";
   List<SpNoticeModelItem> marqueeeItems = [];
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -52,31 +47,25 @@ class _NoticeState extends State<NoticeWidget> {
       return;
     }
     print("noticeModel is $noticeModel ");
-    String errorMsg = "";
-    switch (noticeModel.statusCode) {
-      case AppSpStatusCode.StatusCode_Success:
-        break;
-      case AppSpStatusCode.StatusCode_Cancel:
-        errorMsg = "用户已取消json文件下载";
-        break;
-      case AppSpStatusCode.StatusCode_Timeout:
-        errorMsg = "服务器json文件地址连接超时";
-        break;
-      case AppSpStatusCode.StatusCode_UrlFormatError:
-        errorMsg = "请求地址格式错误";
-        break;
+    String errorMsg = null;
+    if (AppSpStatusCode.StatusCode_Success != noticeModel.code) {
+      errorMsg = noticeModel.errorMsg;
     }
 
-    if (errorMsg.isNotEmpty) {
+    if (errorMsg != null) {
       var snackBar = SnackBar(content: Text(errorMsg));
       _scaffoldkey.currentState.showSnackBar(snackBar);
       return;
+    } else {
+      _handleNotice(noticeModel.modelItemList, noticeType);
     }
-    _handleNotice(noticeModel.modelItemList, noticeType);
   }
 
   _handleNotice(List<SpNoticeModelItem> modelItems, String noticeType,
-      {Color buttonColor, Color titleColor}) {
+      {Color buttonColor, Color titleColor = const Color(0xFFFFA033)}) {
+    if (modelItems == null) {
+      return;
+    }
     if (noticeType == null) {
       //常规场景，不做模拟
       marqueeeItems.clear();
