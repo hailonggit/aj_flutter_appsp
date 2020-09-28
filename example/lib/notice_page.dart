@@ -26,7 +26,7 @@ class NoticeWidget extends StatefulWidget {
 }
 
 class _NoticeState extends State<NoticeWidget> {
-  static const String appKey = "64cf5a851f37c6c0ab7a3186a2377d5d";
+  static const String appKey = "674c0872fc4e4dd3be383b2dc3c37417";
   List<SpNoticeModelItem> marqueeeItems = [];
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
 
@@ -40,6 +40,9 @@ class _NoticeState extends State<NoticeWidget> {
     //ignore
     SpRespNoticeModel noticeModel =
         await appsp.AjFlutterAppSp.getNoticeModel(appKey: appKey);
+    if (!mounted) {
+      return;
+    }
     if (noticeModel == null) {
       Scaffold.of(context).showSnackBar(
         SnackBar(content: Text("没有公告信息")),
@@ -48,8 +51,8 @@ class _NoticeState extends State<NoticeWidget> {
     }
     print("noticeModel is $noticeModel ");
     String errorMsg = null;
-    if (AppSpStatusCode.StatusCode_Success != noticeModel.code) {
-      errorMsg = noticeModel.errorMsg;
+    if (AppSpStatusCode.StatusCode_Success != noticeModel.repCode) {
+      errorMsg = noticeModel.repMsg;
     }
 
     if (errorMsg != null) {
@@ -57,7 +60,7 @@ class _NoticeState extends State<NoticeWidget> {
       _scaffoldkey.currentState.showSnackBar(snackBar);
       return;
     } else {
-      _handleNotice(noticeModel.modelItemList, noticeType);
+      _handleNotice(noticeModel.repData, noticeType);
     }
   }
 
