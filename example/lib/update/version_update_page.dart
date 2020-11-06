@@ -1,15 +1,12 @@
 import 'dart:io';
 import 'dart:ui';
-
-import 'package:aj_flutter_appsp/aj_flutter_appsp.dart' as appsp;
-import 'package:aj_flutter_appsp/appsp_status_code.dart';
-import 'package:aj_flutter_appsp/sp_resp_update_model.dart';
+import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'dialog_utils.dart';
-import 'styles.dart';
-import 'version_update_dialog.dart';
+import 'package:aj_flutter_appsp_example/dialog_utils.dart';
+import 'package:aj_flutter_appsp_example/styles.dart';
+import 'package:aj_flutter_appsp_example/update/version_update_dialog.dart';
 
 class VersionUpdatePage extends StatelessWidget {
   @override
@@ -34,7 +31,7 @@ enum UpdateType {
 }
 
 class _VersionUpdateState extends State<VersionUpdateWidget> {
-  static const String appKey = "674c0872fc4e4dd3be383b2dc3c37417";
+  static const String appKey = "24b14615101b4fe0ab9595d6e1d5e428";
 
   @override
   void initState() {
@@ -45,7 +42,7 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
     //无需改造数据，用服务器返回数据，下面的都是模拟的数据
     //ignore
     SpRespUpdateModel updateModel =
-        await appsp.AjFlutterAppSp.getUpdateModel(appKey: appKey);
+        await AjFlutterAppSp.getUpdateModel(appKey: appKey);
     if (!mounted) {
       return;
     }
@@ -77,6 +74,12 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
     //是否是外部链接，如果是，跳转到外部H5，否则直接下载
     bool isExternalUrl = true;
     UpdateModel updateModel = respModel.repData;
+    if (updateModel == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("当前为最新版本")),
+      );
+      return;
+    }
     if (updateModel != null &&
         updateModel.downloadUrl != null &&
         updateModel.downloadUrl.contains(".apk")) {
